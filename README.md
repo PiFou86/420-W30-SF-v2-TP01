@@ -1,5 +1,30 @@
 # TP01 — Restaurant : lots individuels autonomes
 
+| Lot individuel | Compilation | Tests |
+| --- | --- | --- |
+| Commandes | [![Compilation — Commandes](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-commandes.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-commandes.yml) | [![Tests — Commandes](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-commandes.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-commandes.yml) |
+| Menu | [![Compilation — Menu](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-menu.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-menu.yml) | [![Tests — Menu](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-menu.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-menu.yml) |
+| Réservations | [![Compilation — Réservations](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-reservations.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-reservations.yml) | [![Tests — Réservations](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-reservations.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-reservations.yml) |
+
+Les badges suivent séparément la compilation et les tests de chaque **lot
+individuel** sur la branche `main`. Le responsable de chaque lot est indiqué
+dans `AUTHORS.md`; Réservations concerne seulement la troisième personne, si
+elle est présente.
+
+- **Compilation** : les cinq projets de la solution individuelle compilent.
+- **Tests** : au moins un test est réellement exécuté et réussi, sans échec.
+  Cette vérification construit le projet de tests et ses dépendances. Un départ
+  sans tests peut donc avoir une compilation verte et des tests en échec.
+  Le nombre de cas figure dans le compte rendu GitHub Actions; le badge ne
+  remplace pas la vérification des cas exigés par la grille.
+
+Les vérifications se lancent sur les pull requests vers `main` ou `dev` et les
+envois sur ces branches lorsqu'un fichier du lot ou de sa validation change.
+Elles peuvent aussi être lancées manuellement dans **Actions**. Pour un binôme,
+les badges Réservations ne participent pas à l'évaluation des deux autres lots.
+Lors de la création du dépôt d'équipe, remplacer `PiFou86/420-W30-SF-v2-TP01`
+dans les liens des six badges par le propriétaire et le nom de ce dépôt.
+
 ## Intention
 
 Chaque personne réalise une petite fonctionnalité complète traversant la présentation, Application, le domaine et Infrastructure. Le TP se fait en binôme; une équipe de trois ajoute un troisième lot de réservations. Chaque lot se compile, se teste et s'exécute **sans le code des autres personnes**. Une intégration incomplète ou l'abandon d'un membre ne bloque pas l'évaluation du travail individuel déjà réalisé.

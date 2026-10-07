@@ -1,0 +1,58 @@
+name: Compilation — Réservations
+
+"on":
+  push:
+    branches: [main, dev]
+    paths:
+      - 'lots/Reservations/**'
+      - '.github/workflows/compilation-reservations.yml'
+      - '.github/scripts/**'
+      - 'global.json'
+      - 'NuGet.Config'
+      - 'nuget.config'
+      - 'Directory.Build.*'
+      - 'Directory.Packages.props'
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - 'lots/Reservations/**'
+      - '.github/workflows/compilation-reservations.yml'
+      - '.github/scripts/**'
+      - 'global.json'
+      - 'NuGet.Config'
+      - 'nuget.config'
+      - 'Directory.Build.*'
+      - 'Directory.Packages.props'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  valider:
+    name: Réservations — compilation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: lots/Reservations
+    steps:
+      - name: Récupérer uniquement le lot et le vérificateur
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            lots/Reservations
+            .github/scripts
+      - name: Installer .NET 10
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.x'
+      - name: Restaurer les dépendances
+        run: dotnet restore TP01_Reservations.slnx
+      - name: Compiler le lot isolément
+        run: dotnet build TP01_Reservations.slnx --configuration Release --no-restore
