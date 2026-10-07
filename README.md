@@ -1,10 +1,10 @@
 # TP01 — Restaurant : lots individuels autonomes
 
-| Lot individuel | Compilation | Tests |
-| --- | --- | --- |
-| Commandes | [![Compilation — Commandes](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-commandes.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-commandes.yml) | [![Tests — Commandes](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-commandes.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-commandes.yml) |
-| Menu | [![Compilation — Menu](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-menu.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-menu.yml) | [![Tests — Menu](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-menu.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-menu.yml) |
-| Réservations | [![Compilation — Réservations](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-reservations.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-reservations.yml) | [![Tests — Réservations](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-reservations.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-reservations.yml) |
+| Lot individuel / équipier | Compilation | Tests | Cas réussis / détectés |
+| --- | --- | --- | --- |
+| Commandes | [![Compilation — Commandes](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-commandes.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-commandes.yml) | [![Tests — Commandes](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-commandes.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-commandes.yml)  | [![Nombre de cas — Commandes](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FPiFou86%2F420-W30-SF-v2-TP01%2Fbadges-tests%2Fcompteurs%2Fcommandes.json&cacheSeconds=300)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-commandes.yml) |
+| Menu | [![Compilation — Menu](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-menu.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-menu.yml) | [![Tests — Menu](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-menu.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-menu.yml)  | [![Nombre de cas — Menu](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FPiFou86%2F420-W30-SF-v2-TP01%2Fbadges-tests%2Fcompteurs%2Fmenu.json&cacheSeconds=300)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-menu.yml) |
+| Réservations | [![Compilation — Réservations](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-reservations.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/compilation-reservations.yml) | [![Tests — Réservations](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-reservations.yml/badge.svg?branch=main&event=push)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-reservations.yml)  | [![Nombre de cas — Réservations](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FPiFou86%2F420-W30-SF-v2-TP01%2Fbadges-tests%2Fcompteurs%2Freservations.json&cacheSeconds=300)](https://github.com/PiFou86/420-W30-SF-v2-TP01/actions/workflows/tests-reservations.yml) |
 
 Les badges suivent séparément la compilation et les tests de chaque **lot
 individuel** sur la branche `main`. Le responsable de chaque lot est indiqué
@@ -15,15 +15,26 @@ elle est présente.
 - **Tests** : au moins un test est réellement exécuté et réussi, sans échec.
   Cette vérification construit le projet de tests et ses dépendances. Un départ
   sans tests peut donc avoir une compilation verte et des tests en échec.
-  Le nombre de cas figure dans le compte rendu GitHub Actions; le badge ne
-  remplace pas la vérification des cas exigés par la grille.
+  La dernière colonne affiche automatiquement les cas **réussis / détectés**
+  après une vérification de `main`, même lorsque des tests échouent. Chaque jeu
+  de données d'un test paramétré compte pour un cas; les assertions ne sont pas
+  comptées. `0 / 0` indique un rapport sans tests; « indisponible » indique
+  l'absence de rapport exploitable. Les détails des cas exécutés, échoués et non
+  exécutés figurent dans GitHub Actions. Le nombre seul ne remplace pas la
+  vérification des cas exigés par la grille.
 
 Les vérifications se lancent sur les pull requests vers `main` ou `dev` et les
 envois sur ces branches lorsqu'un fichier du lot ou de sa validation change.
 Elles peuvent aussi être lancées manuellement dans **Actions**. Pour un binôme,
 les badges Réservations ne participent pas à l'évaluation des deux autres lots.
 Lors de la création du dépôt d'équipe, remplacer `PiFou86/420-W30-SF-v2-TP01`
-dans les liens des six badges par le propriétaire et le nom de ce dépôt.
+dans les liens des badges (y compris les URL encodées des compteurs) par le
+propriétaire et le nom de ce dépôt. Les compteurs utilisent Shields.io et un
+fichier JSON public sur la branche automatique `badges-tests`; ils ne sont pas
+affichables ainsi pour un dépôt privé. La publication se fait dans un job séparé
+qui n'exécute pas le code étudiant et n'écrit pas sur `main` ou `dev`. Les pull
+requests donnent leurs nombres dans GitHub Actions sans publier le compteur du
+README. Le compteur peut mettre quelques minutes à se rafraîchir.
 
 ## Intention
 

@@ -37,6 +37,8 @@ jobs:
     name: Commandes — tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    outputs:
+      statistiques: ${{ steps.bilan.outputs.statistiques }}
     defaults:
       run:
         working-directory: lots/Commandes
@@ -57,6 +59,91 @@ jobs:
       - name: Construire les projets nécessaires et exécuter les tests
         id: tests
         run: dotnet test TP01_Commandes.Tests/TP01_Commandes.Tests.csproj --configuration Release --no-restore --logger 'trx;LogFileName=resultats.trx' --results-directory TestResults
-      - name: Vérifier que des tests ont réellement réussi
-        if: ${{ always() && steps.tests.outcome != 'skipped' }}
+      - name: Compter les cas et vérifier les résultats
+        id: bilan
+        if: ${{ always() }}
         run: python3 ../../.github/scripts/verifier_resultats_tests.py TestResults
+
+  publier_compteur:
+    name: Commandes — nombre de tests
+    needs: valider
+    if: ${{ always() && !cancelled() && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      contents: write
+    steps:
+      - name: Publier uniquement les compteurs validés
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          LOT: commandes
+          STATISTIQUES: ${{ needs.valider.outputs.statistiques }}
+          RESULTAT: ${{ needs.valider.result }}
+        with:
+          script: |
+            // Ce script est intégré au job de publication, sans checkout ni code étudiant.
+            const lot = process.env.LOT;
+            if (!['commandes', 'menu', 'reservations'].includes(lot)) {
+              throw new Error('Lot inconnu.');
+            }
+            const chiffres = JSON.parse(process.env.STATISTIQUES || '{"available":false}');
+            if (typeof chiffres.available !== 'boolean') {
+              throw new Error('Disponibilité des compteurs invalide.');
+            }
+            if (chiffres.available) {
+              for (const cle of ['total', 'executed', 'passed', 'failed', 'skipped']) {
+                if (!Number.isSafeInteger(chiffres[cle]) || chiffres[cle] < 0) {
+                  throw new Error('Compteur invalide.');
+                }
+              }
+              if (!(chiffres.total >= chiffres.executed && chiffres.executed >= chiffres.passed + chiffres.failed && chiffres.skipped === chiffres.total - chiffres.executed)) {
+                throw new Error('Compteurs incohérents.');
+              }
+            }
+            const vert = chiffres.available && chiffres.executed > 0 && chiffres.passed === chiffres.executed && process.env.RESULTAT === 'success';
+            const badge = {
+              schemaVersion: 1,
+              label: 'cas réussis / détectés',
+              message: chiffres.available ? `${chiffres.passed} / ${chiffres.total}` : 'indisponible',
+              color: vert ? 'brightgreen' : (chiffres.available && chiffres.total > 0 ? 'red' : 'lightgrey')
+            };
+            const branche = 'badges-tests';
+            const chemin = `compteurs/${lot}.json`;
+            const repo = context.repo;
+            try {
+              await github.rest.git.getRef({...repo, ref: `heads/${branche}`});
+            } catch (erreur) {
+              if (erreur.status !== 404) throw erreur;
+              const source = await github.rest.git.getRef({...repo, ref: 'heads/main'});
+              try {
+                await github.rest.git.createRef({...repo, ref: `refs/heads/${branche}`, sha: source.data.object.sha});
+              } catch (creation) {
+                if (creation.status !== 422) throw creation;
+                await github.rest.git.getRef({...repo, ref: `heads/${branche}`});
+              }
+            }
+            const contenu = Buffer.from(JSON.stringify(badge, null, 2) + '\n').toString('base64');
+            for (let essai = 0; essai < 3; essai++) {
+              let sha;
+              try {
+                const existant = await github.rest.repos.getContent({...repo, path: chemin, ref: branche});
+                sha = existant.data.sha;
+                if (existant.data.content.replace(/\s/g, '') === contenu) {
+                  core.info('Compteur déjà à jour.');
+                  return;
+                }
+              } catch (erreur) {
+                if (erreur.status !== 404) throw erreur;
+              }
+              try {
+                await github.rest.repos.createOrUpdateFileContents({
+                  ...repo, path: chemin, branch: branche,
+                  message: `Actualiser le compteur des tests : ${lot}`,
+                  content: contenu, ...(sha ? {sha} : {})
+                });
+                core.info(`Compteur ${lot} publié sur ${branche}.`);
+                return;
+              } catch (erreur) {
+                if (erreur.status !== 409 || essai === 2) throw erreur;
+              }
+            }
